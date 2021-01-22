@@ -13,3 +13,7 @@ BrianDrive is driver control (finished 12/22/20)
 -1/3/22 PATCH NOTES 
 
 -If the x button is pressed, the robots front swaps to its back, inverting the forward and backward directions. Turning remains the same. Drifting needs to be implemented into the inversion
+
+1/21/21 PATCH NOTES
+
+-Alignment with red ball.
