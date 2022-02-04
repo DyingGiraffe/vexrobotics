@@ -48,6 +48,10 @@ void pre_auton(void) {
 
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  Intake.setStopping(hold);
+  Intake.stop();
+  Pneumatic=false;
+  Bonnet=false;
   Inertial.calibrate();
   while (Inertial.isCalibrating()) {
     vex::this_thread::sleep_for(10);
@@ -193,11 +197,17 @@ void Right(double distance, int vel) {
   }
 }
 void raiseLift(double distance, int vel2) {
-  Intake.setPosition(0, degrees);
-  Intake.setVelocity(vel2, percent);
-  Intake.spin(forward);
-  waitUntil(Intake.position(degrees) >= distance);
-  { Intake.stop(); }
+  RLift.setPosition(0, degrees);
+  LLift.setPosition(0, degrees);
+  RLift.setVelocity(vel2, percent);
+  LLift.setVelocity(vel2, percent);
+  RLift.spin(forward);
+  LLift.spin(forward);
+  waitUntil(RLift.position(degrees) >= distance);
+  RLift.setStopping(hold);
+  LLift.setStopping(hold);
+  RLift.stop();
+  LLift.stop();
 }
 void intake(double distance, int vel) {
   Intake.setPosition(0, degrees);
@@ -238,10 +248,11 @@ void closeClaw(int distance, int vel) {
 }
 
 void closeClawTimed(double milliseconds, int vel) {
+  timing=0;
   mClaw.setPosition(0, degrees);
   mClaw.setVelocity(vel, percent);
   mClaw.spin(reverse);
-  while (timing >= milliseconds) {
+  while (timing <= milliseconds) {
     vex::this_thread::sleep_for(10);
     timing += 10;
   }
@@ -299,13 +310,15 @@ void autonomous(void) {
   vex::this_thread::sleep_for(100);
   Pneumatic = true;
   vex::this_thread::sleep_for(500);
-  Backwards(1300, 100);
+  Backwards(1250, 100);
+  raiseLift(100, 50);
   vex::this_thread::sleep_for(200);
   Left(55, 70);
   vex::this_thread::sleep_for(100);
   openClaws(1500, 100);
   Backwards(160, 100);
   closeClawTimed(2000, 100);
+  Bonnet=true;
   outtake(700, 40);
   vex::this_thread::sleep_for(100);
   Forward(150, 80);

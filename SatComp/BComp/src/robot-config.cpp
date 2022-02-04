@@ -19,6 +19,8 @@ motor RLift = motor(PORT9, ratio18_1, false);
 motor LLift = motor(PORT10, ratio18_1, true);
 motor MClaw = motor(PORT16, ratio18_1, false);
 digital_out Pneumatic = digital_out(Brain.ThreeWirePort.H);
+digital_out Bonnet = digital_out(Brain.ThreeWirePort.G);
+inertial Inertial = inertial(PORT11);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

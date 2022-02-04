@@ -21,6 +21,8 @@
 // LLift                motor         10              
 // MClaw                motor         16              
 // Pneumatic            digital_out   H               
+// Bonnet               digital_out   G               
+// Inertial             inertial      11              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -46,7 +48,14 @@ void pre_auton(void) {
   
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  Intake.setStopping(hold);
+  Intake.stop();
   Pneumatic=false;
+  Bonnet=false;
+  /*Inertial.calibrate();
+  while (Inertial.isCalibrating()) {
+    vex::this_thread::sleep_for(10);
+  }*/
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -268,7 +277,9 @@ void pneumaticsOff(){
 void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
-
+  /*while (Inertial.isCalibrating()) {
+    vex::this_thread::sleep_for(10);
+  }*/
 Pneumatic=false;
   Forward(1200, 100);
   vex::this_thread::sleep_for(100);
@@ -301,6 +312,7 @@ Pneumatic=false;
 void usercontrol(void) {
   // User control code here, inside the loop
   int pneumaticIO = 0;
+  int pneumaticIO2 = 0;
   while (1) {
     if (abs(Controller1.Axis3.position(percent)) > 10) {
       if (abs(Controller1.Axis1.position(percent)) > 10) { // strafing
@@ -461,6 +473,18 @@ void usercontrol(void) {
         vex::this_thread::sleep_for(200);
       }
     }
+
+      pneumaticIO2=Bonnet;
+      if(Controller1.ButtonB.pressing()){
+          if(pneumaticIO2==1){
+            Bonnet=0;
+            vex::this_thread::sleep_for(200);
+          }
+          else{ 
+          Bonnet=1;
+          vex::this_thread::sleep_for(200);
+        }
+      }
 
     RLift.spin(forward);
     LLift.spin(forward);

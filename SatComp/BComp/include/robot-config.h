@@ -14,6 +14,8 @@ extern motor RLift;
 extern motor LLift;
 extern motor MClaw;
 extern digital_out Pneumatic;
+extern digital_out Bonnet;
+extern inertial Inertial;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
